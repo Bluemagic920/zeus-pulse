@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ZEUS ONE Pulse — Zero-Export Executive Rollups | pulse.profitharborai.com</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Inter & JetBrains Mono Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            obsidian: '#080B12',
+            surface: '#0F172A',
+            card: '#111827',
+            borderline: '#1E293B',
+            zeus: {
+              DEFAULT: '#F59E0B',
+              dark: '#D97706',
+              light: '#FBBF24',
+            },
+            electric: {
+              DEFAULT: '#38BDF8',
+              dark: '#0EA5E9',
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      background-color: #080B12;
+      color: #F8FAFC;
+      font-family: 'Inter', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+    .zeus-glow {
+      box-shadow: 0 0 36px -8px rgba(245, 158, 11, 0.28);
+    }
+    .hero-grid {
+      background-image: radial-gradient(rgba(245, 158, 11, 0.12) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-amber-500/30 selection:text-amber-200">
+
+  <!-- Toast Notification Banner -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none max-w-sm w-full px-4 sm:px-0"></div>
+
+  <!-- Top Navigation -->
+  <header class="sticky top-0 z-40 bg-[#080B12]/90 backdrop-blur-md border-b border-[#1E293B]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      
+      <!-- Brand -->
+      <a href="#" class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400 via-amber-500 to-amber-700 flex items-center justify-center text-slate-950 font-extrabold text-lg shadow-lg shadow-amber-500/20">
+          <i class="fa-solid fa-bolt"></i>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="font-extrabold tracking-tight text-lg text-white">ZEUS ONE</span>
+          <span class="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-400 border border-amber-500/30">
+            Pulse
+          </span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav Links -->
+      <nav class="hidden md:flex items-center gap-7 text-sm font-medium text-slate-300">
+        <a href="#how-it-works" class="hover:text-white transition-colors">How It Works</a>
+        <a href="#live-sample" class="hover:text-white transition-colors">Sample Digest</a>
+        <a href="#roi-calculator" class="hover:text-white transition-colors">ROI Calculator</a>
+        <a href="#pricing" class="hover:text-white transition-colors">Pricing</a>
+      </nav>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-2.5">
+        <a href="app.html" class="px-3.5 py-2 rounded-xl bg-[#0F172A] hover:bg-[#1E293B] text-slate-200 text-xs sm:text-sm font-semibold border border-[#1E293B] transition-all">
+          Live Workspace Demo
+        </a>
+        <a href="#pricing" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs sm:text-sm font-extrabold shadow-lg shadow-amber-500/20 transition-all">
+          Start Free Trial
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="relative hero-grid border-b border-[#1E293B] overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <!-- Left Copy -->
+        <div class="lg:col-span-6 space-y-6">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold uppercase tracking-wider">
+            <i class="fa-solid fa-sparkles"></i>
+            <span>Zero CSV Exports &bull; Zero Dashboard Bloat</span>
+          </div>
+
+          <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight leading-[1.12]">
+            Know Your Real Profit Every Monday at <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-200">7:00 AM.</span>
+          </h1>
+
+          <p class="text-base sm:text-lg text-slate-300 leading-relaxed">
+            Stop spending Sunday nights exporting spreadsheets from QuickBooks, Stripe, Shopify, and Meta Ads. <strong>Zeus One Pulse</strong> reconciles your numbers automatically and pushes a plain-English executive digest straight to your Email, Slack, or Teams.
+          </p>
+
+          <div class="flex flex-wrap items-center gap-3 pt-2">
+            <a href="#pricing" class="px-6 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold text-sm sm:text-base shadow-xl shadow-amber-500/25 transition-all flex items-center gap-2">
+              <span>Start 14-Day Free Trial</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
+            <a href="app.html" class="px-5 py-3.5 rounded-xl bg-[#111827] hover:bg-[#1E293B] text-white font-semibold text-sm sm:text-base border border-[#1E293B] transition-all flex items-center gap-2">
+              <i class="fa-solid fa-play text-sky-400 text-xs"></i>
+              <span>Explore Interactive App</span>
+            </a>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-5 pt-2 text-xs text-slate-400">
+            <span class="flex items-center gap-1.5"><i class="fa-solid fa-lock text-emerald-400"></i> 100% Read-Only OAuth</span>
+            <span class="flex items-center gap-1.5"><i class="fa-solid fa-clock text-sky-400"></i> 3-Minute Setup</span>
+            <span class="flex items-center gap-1.5"><i class="fa-solid fa-shield-check text-amber-400"></i> Cancel Anytime</span>
+          </div>
+        </div>
+
+        <!-- Right Interactive Sample Digest Card -->
+        <div id="live-sample" class="lg:col-span-6">
+          <div class="bg-[#111827] border border-[#1E293B] rounded-2xl overflow-hidden zeus-glow">
+            
+            <!-- Digest Top Bar with Niche Toggle -->
+            <div class="bg-[#0F172A] px-5 py-4 border-b border-[#1E293B] flex flex-wrap items-center justify-between gap-2">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-200">Live Monday Digest Preview</span>
+              </div>
+              <div class="flex bg-[#080B12] p-0.5 rounded-lg border border-[#1E293B] text-xs">
+                <button onclick="setSampleNiche('ecom')" id="niche-ecom" class="px-2.5 py-1 rounded-md font-semibold bg-amber-500 text-slate-950">E-Commerce</button>
+                <button onclick="setSampleNiche('agency')" id="niche-agency" class="px-2.5 py-1 rounded-md font-semibold text-slate-400 hover:text-white">Agency</button>
+                <button onclick="setSampleNiche('retail')" id="niche-retail" class="px-2.5 py-1 rounded-md font-semibold text-slate-400 hover:text-white">Multi-Store</button>
+              </div>
+            </div>
+
+            <!-- Digest Content -->
+            <div class="p-6 space-y-5">
+              <div>
+                <div class="text-[11px] font-mono text-amber-400 uppercase">Monday 07:00 AM &bull; Delivered to Email &amp; #exec-pulse</div>
+                <h2 id="sample-company" class="text-lg font-extrabold text-white mt-0.5">Apex E-Commerce Co. — Weekly Pulse</h2>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div class="bg-[#080B12] border border-[#1E293B] rounded-xl p-3.5">
+                  <div class="text-xs text-slate-400">Net Cash Flow (7d)</div>
+                  <div id="sample-net" class="text-xl sm:text-2xl font-extrabold text-emerald-400 tabular-nums mt-0.5">+$14,280</div>
+                  <div id="sample-net-sub" class="text-[11px] text-slate-400 mt-1">▲ +12.4% vs. prior week</div>
+                </div>
+                <div class="bg-[#080B12] border border-[#1E293B] rounded-xl p-3.5">
+                  <div class="text-xs text-slate-400">Gross Revenue</div>
+                  <div id="sample-rev" class="text-xl sm:text-2xl font-extrabold text-white tabular-nums mt-0.5">$48,900</div>
+                  <div id="sample-rev-sub" class="text-[11px] text-sky-400 font-mono mt-1">Shopify + Stripe</div>
+                </div>
+              </div>
+
+              <div class="bg-[#080B12] border border-rose-500/30 rounded-xl p-4 space-y-2">
+                <div class="text-xs font-bold text-rose-400 uppercase tracking-wider flex items-center gap-1.5">
+                  <i class="fa-solid fa-triangle-exclamation"></i>
+                  <span>Silent Leaks Flagged Automatically</span>
+                </div>
+                <ul id="sample-leaks" class="space-y-1.5 text-xs text-slate-300">
+                  <li>&bull; <strong>Refund Spike:</strong> Refunds hit 4.8% ($2,340) vs. 1.9% 90-day avg.</li>
+                  <li>&bull; <strong>Overdue AR:</strong> 4 B2B invoices ($8,150) crossed 30 days past due.</li>
+                  <li>&bull; <strong>Ad CAC Drift:</strong> Meta Ads spend rose 18% while conversions stayed flat.</li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS (3-STEP PIPELINE) -->
+  <section id="how-it-works" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 space-y-12">
+    <div class="text-center max-w-2xl mx-auto space-y-2">
+      <span class="text-xs font-bold uppercase tracking-wider text-sky-400">Zero-Friction Architecture</span>
+      <h2 class="text-2xl sm:text-4xl font-extrabold text-white">Set Up Once in 3 Minutes. Never Export a CSV Again.</h2>
+      <p class="text-sm sm:text-base text-slate-400">
+        No data engineers, no complex BI dashboards you forget to log into, and zero write-access risk to your bank or ledger.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="bg-[#111827] border border-[#1E293B] rounded-2xl p-6 space-y-3">
+        <div class="w-11 h-11 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-400 flex items-center justify-center font-extrabold text-lg">
+          1
+        </div>
+        <h3 class="text-lg font-bold text-white">Connect Read-Only OAuth</h3>
+        <p class="text-sm text-slate-400 leading-relaxed">
+          Authorize Stripe, QuickBooks Online, Shopify, Square, Gusto, or Meta Ads with two clicks using strict read-only API scopes.
+        </p>
+      </div>
+
+      <div class="bg-[#111827] border border-[#1E293B] rounded-2xl p-6 space-y-3">
+        <div class="w-11 h-11 rounded-xl bg-sky-500/15 border border-sky-500/30 text-sky-400 flex items-center justify-center font-extrabold text-lg">
+          2
+        </div>
+        <h3 class="text-lg font-bold text-white">Deterministic Rollup &amp; Guardrails</h3>
+        <p class="text-sm text-slate-400 leading-relaxed">
+          Every Sunday night, our math engine reconciles cross-platform cash flow, contribution margin, and flags refund, invoice, or runway anomalies.
+        </p>
+      </div>
+
+      <div class="bg-[#111827] border border-[#1E293B] rounded-2xl p-6 space-y-3">
+        <div class="w-11 h-11 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center font-extrabold text-lg">
+          3
+        </div>
+        <h3 class="text-lg font-bold text-white">Monday 7:00 AM Push Brief</h3>
+        <p class="text-sm text-slate-400 leading-relaxed">
+          Wake up to a scannable, plain-English executive summary in your Email inbox, Slack channel, MS Teams, or SMS—zero login required.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTERACTIVE ROI CALCULATOR -->
+  <section id="roi-calculator" class="bg-[#0F172A]/60 border-y border-[#1E293B] py-16">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-[#111827] border border-[#1E293B] rounded-2xl p-6 sm:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        
+        <div class="lg:col-span-7 space-y-5">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-amber-400">Time &amp; Cash Leak Calculator</span>
+            <h2 class="text-2xl font-extrabold text-white mt-1">See What Manual Reporting Costs You</h2>
+          </div>
+
+          <div class="space-y-4">
+            <div>
+              <div class="flex justify-between text-xs sm:text-sm mb-1.5">
+                <span class="text-slate-300">Hours spent pulling &amp; formatting reports per week</span>
+                <span id="roi-hours-val" class="font-mono font-bold text-amber-400 tabular-nums">3.5 hrs / wk</span>
+              </div>
+              <input type="range" id="roi-hours" min="1" max="15" step="0.5" value="3.5" oninput="updateROI()"
+                class="w-full accent-amber-500 bg-[#080B12] h-2 rounded-lg cursor-pointer" />
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs sm:text-sm mb-1.5">
+                <span class="text-slate-300">Hourly value of founder / controller time</span>
+                <span id="roi-rate-val" class="font-mono font-bold text-sky-400 tabular-nums">$125 / hr</span>
+              </div>
+              <input type="range" id="roi-rate" min="50" max="350" step="25" value="125" oninput="updateROI()"
+                class="w-full accent-sky-400 bg-[#080B12] h-2 rounded-lg cursor-pointer" />
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 bg-[#080B12] border border-[#1E293B] rounded-2xl p-6 text-center space-y-3">
+          <div class="text-xs font-semibold uppercase tracking-wider text-slate-400">Annual Admin Cost Eliminated</div>
+          <div id="roi-annual-savings" class="text-4xl font-black text-emerald-400 tabular-nums">$22,750</div>
+          <p id="roi-hours-saved" class="text-xs text-slate-400">Reclaims <strong>182 hours/year</strong> of executive focus.</p>
+          <div class="pt-2">
+            <a href="#pricing" class="inline-block w-full py-2.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs transition-all">
+              Reclaim Your Mondays &rarr;
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING SECTION -->
+  <section id="pricing" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 space-y-12">
+    <div class="text-center max-w-2xl mx-auto space-y-2">
+      <span class="text-xs font-bold uppercase tracking-wider text-amber-400">Simple, Transparent SaaS Pricing</span>
+      <h2 class="text-2xl sm:text-4xl font-extrabold text-white">Start Your 14-Day Free Trial</h2>
+      <p class="text-sm sm:text-base text-slate-400">
+        Standalone subscription on <span class="font-mono text-slate-300">pulse.profitharborai.com</span>. Upgrade, downgrade, or cancel in one click.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+      
+      <!-- Starter Tier -->
+      <div class="bg-[#111827] border border-[#1E293B] rounded-2xl p-7 flex flex-col justify-between space-y-6">
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="text-lg font-bold text-white">Pulse Starter</h3>
+            <span class="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300">Solo &amp; Small Teams</span>
+          </div>
+          <div class="flex items-baseline gap-1">
+            <span class="text-4xl font-black text-white tabular-nums">$49</span>
+            <span class="text-sm text-slate-400">/ month</span>
+          </div>
+          <p class="text-xs text-slate-400">Ideal for founders wanting a clean Monday morning cash and revenue snapshot.</p>
+          <ul class="space-y-3 text-xs sm:text-sm text-slate-300 pt-4 border-t border-[#1E293B]">
+            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-emerald-400"></i> Up to 3 Read-Only Integrations</li>
+            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-emerald-400"></i> Weekly Monday 7:00 AM Email Brief</li>
+            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-emerald-400"></i> 3 Core Leak &amp; Refund Guardrails</li>
+            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-emerald-400"></i> 90-Day Trailing Benchmarks</li>
+          </ul>
+        </div>
+        <button onclick="openCheckoutModal('Pulse Starter', 49)" class="w-full py-3 rounded-xl bg-[#080B12] hover:bg-[#1E293B] border border-[#1E293B] text-white font-bold text-sm transition-all">
+          Start 14-Day Free Trial
+        </button>
+      </div>
+
+      <!-- Growth Tier (Most Popular) -->
+      <div class="bg-[#111827] border-2 border-amber-500 rounded-2xl p-7 flex flex-col justify-between space-y-6 zeus-glow relative">
+        <div class="absolute -top-3.5 right-6 bg-amber-500 text-slate-950 text-[11px] font-extrabold uppercase tracking-wider px-3 py-0.5 rounded-full">
+          Most Popular
+        </div>
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="text-lg font-bold text-amber-400">Pulse Growth</h3>
+            <span class="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300">Scaling SMBs</span>
+          </div>
+          <div class="flex items-baseline gap-1">
+            <span class="text-4xl font-black text-white tabular-nums">$149</span>
+            <span class="text-sm text-slate-400">/ month</span>
+          </div>
+          <p class="text-xs text-slate-400">Full cross-platform reconciliation pushed to Slack, MS Teams, Email, and SMS.</p>
+          <ul class="space-y-3 text-xs sm:text-sm text-slate-200 pt-4 border-t border-[#1E293B]">
+            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-amber-400"></i> Unlimited Data Sources &amp; Locations</li>
+            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-amber-400"></i> Slack, MS Teams, Email &amp; SMS Push</li>
+            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-amber-400"></i> Custom Anomaly Threshold Sliders</li>
+            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-amber-400"></i> Multi-Recipient Executive Distribution</li>
+          </ul>
+        </div>
+        <button onclick="openCheckoutModal('Pulse Growth', 149)" class="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-sm shadow-lg shadow-amber-500/20 transition-all">
+          Start 14-Day Free Trial
+        </button>
+      </div>
+
+      <!-- Agency / Fractional CFO Tier -->
+      <div class="bg-[#111827] border border-[#1E293B] rounded-2xl p-7 flex flex-col justify-between space-y-6">
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="text-lg font-bold text-sky-400">Fractional CFO / Agency</h3>
+            <span class="text-xs px-2.5 py-0.5 rounded-full bg-sky-500/15 text-sky-300">Up to 25 Clients</span>
+          </div>
+          <div class="flex items-baseline gap-1">
+            <span class="text-4xl font-black text-white tabular-nums">$399</span>
+            <span class="text-sm text-slate-400">/ month</span>
+          </div>
+          <p class="text-xs text-slate-400">Automate white-labeled Monday client reports across your entire advisory portfolio.</p>
+          <ul class="space-y-3 text-xs sm:text-sm text-slate-300 pt-4 border-t border-[#1E293B]">
+            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-sky-400"></i> 25 Client Workspaces Included</li>
+            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-sky-400"></i> White-Labeled Firm Branding</li>
+            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-sky-400"></i> Portfolio-Wide Risk Triage Console</li>
+            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-sky-400"></i> One-Click Client OAuth Invite Links</li>
+          </ul>
+        </div>
+        <button onclick="openCheckoutModal('Fractional CFO / Agency', 399)" class="w-full py-3 rounded-xl bg-[#080B12] hover:bg-[#1E293B] border border-sky-500/40 text-sky-400 font-bold text-sm transition-all">
+          Start 14-Day Partner Trial
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-[#1E293B] bg-[#080B12] py-8 px-4 sm:px-6 lg:px-8 mt-auto">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+      <div class="flex items-center gap-2.5">
+        <span class="font-extrabold text-white">ZEUS ONE PULSE</span>
+        <span>&bull;</span>
+        <span>Zero-Export Executive Rollups</span>
+      </div>
+      <div class="flex flex-wrap items-center gap-4">
+        <a href="app.html" class="text-sky-400 hover:underline">Workspace Login</a>
+        <span>&bull;</span>
+        <a href="https://zeusone.profitharborai.com" class="hover:text-white transition-colors">Zeus One Accounting Suite</a>
+        <span>&bull;</span>
+        <span class="font-mono text-slate-500">pulse.profitharborai.com</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- TRIAL & STRIPE CHECKOUT MODAL -->
+  <div id="checkout-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+    <div class="bg-[#111827] border border-[#1E293B] rounded-2xl max-w-md w-full overflow-hidden shadow-2xl">
+      <div class="px-6 py-4 bg-[#0F172A] border-b border-[#1E293B] flex items-center justify-between">
+        <div>
+          <span class="text-[11px] font-bold uppercase tracking-wider text-amber-400">14-Day Free Trial</span>
+          <h3 id="checkout-plan-title" class="text-base font-extrabold text-white">Pulse Growth — $149/mo</h3>
+        </div>
+        <button onclick="closeCheckoutModal()" class="text-slate-400 hover:text-white p-1.5">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <form onsubmit="handleTrialSubmit(event)" class="p-6 space-y-4">
+        <div>
+          <label for="trial-company" class="block text-xs font-semibold text-slate-300 mb-1">Company or Firm Name</label>
+          <input type="text" id="trial-company" required placeholder="e.g. Apex E-Commerce Co."
+            class="w-full bg-[#080B12] border border-[#1E293B] rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-amber-500" />
+        </div>
+        <div>
+          <label for="trial-email" class="block text-xs font-semibold text-slate-300 mb-1">Work Email (for Monday Digest)</label>
+          <input type="email" id="trial-email" required placeholder="founder@company.com"
+            class="w-full bg-[#080B12] border border-[#1E293B] rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-amber-500" />
+        </div>
+
+        <div class="bg-[#080B12] border border-[#1E293B] rounded-xl p-3.5 text-xs text-slate-400 space-y-1">
+          <div class="flex justify-between text-slate-200 font-semibold">
+            <span>Due today (14-day trial)</span>
+            <span class="text-emerald-400">$0.00</span>
+          </div>
+          <div class="flex justify-between">
+            <span>After trial ends</span>
+            <span id="checkout-price-note" class="font-mono">$149.00 / month</span>
+          </div>
+        </div>
+
+        <button type="submit" class="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-sm shadow-lg shadow-amber-500/20 transition-all">
+          Provision Workspace &amp; Launch App &rarr;
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const SAMPLE_NICHES = {
+      ecom: {
+        company: 'Apex E-Commerce Co. — Weekly Pulse',
+        net: '+$14,280',
+        netSub: '▲ +12.4% vs. prior week',
+        rev: '$48,900',
+        revSub: 'Shopify + Stripe',
+        leaks: [
+          '&bull; <strong>Refund Spike:</strong> Refunds hit 4.8% ($2,340) vs. 1.9% 90-day avg.',
+          '&bull; <strong>Overdue AR:</strong> 4 B2B invoices ($8,150) crossed 30 days past due.',
+          '&bull; <strong>Ad CAC Drift:</strong> Meta Ads spend rose 18% while conversions stayed flat.'
+        ]
+      },
+      agency: {
+        company: 'Vanguard B2B Agency — Weekly Pulse',
+        net: '+$22,640',
+        netSub: '▲ +8.6% vs. prior week',
+        rev: '$64,200',
+        revSub: 'QuickBooks + Stripe',
+        leaks: [
+          '&bull; <strong>Aging Retainers:</strong> 6 invoices ($24,800) passed 30 days overdue in QBO.',
+          '&bull; <strong>Utilization Dip:</strong> Contractor hours rose 9% on fixed-fee accounts.',
+          '&bull; <strong>Runway Strong:</strong> Operating reserves holding steady at 6.8 months.'
+        ]
+      },
+      retail: {
+        company: 'Metro 4-Location Retail — Weekly Pulse',
+        net: '+$9,410',
+        netSub: '▼ -4.2% vs. prior week',
+        rev: '$53,400',
+        revSub: 'Square POS + Gusto',
+        leaks: [
+          '&bull; <strong>Labor Ratio Alert:</strong> Store #3 overtime pushed payroll to 38.4% of sales.',
+          '&bull; <strong>Runway Floor:</strong> Cash reserves dipped to 3.1 mos (below 4.0-mo target).',
+          '&bull; <strong>Return Rate:</strong> Weekend POS exchanges rose to 3.6%.'
+        ]
+      }
+    };
+
+    function setSampleNiche(key) {
+      const data = SAMPLE_NICHES[key];
+      ['ecom', 'agency', 'retail'].forEach((k) => {
+        const btn = document.getElementById(`niche-${k}`);
+        btn.className = k === key
+          ? 'px-2.5 py-1 rounded-md font-semibold bg-amber-500 text-slate-950'
+          : 'px-2.5 py-1 rounded-md font-semibold text-slate-400 hover:text-white';
+      });
+      document.getElementById('sample-company').textContent = data.company;
+      document.getElementById('sample-net').textContent = data.net;
+      document.getElementById('sample-net-sub').textContent = data.netSub;
+      document.getElementById('sample-rev').textContent = data.rev;
+      document.getElementById('sample-rev-sub').textContent = data.revSub;
+      document.getElementById('sample-leaks').innerHTML = data.leaks.map((l) => `<li>${l}</li>`).join('');
+    }
+
+    function updateROI() {
+      const hours = parseFloat(document.getElementById('roi-hours').value);
+      const rate = parseInt(document.getElementById('roi-rate').value, 10);
+      const annualHours = Math.round(hours * 52);
+      const annualDollars = Math.round(annualHours * rate);
+
+      document.getElementById('roi-hours-val').textContent = `${hours.toFixed(1)} hrs / wk`;
+      document.getElementById('roi-rate-val').textContent = `$${rate} / hr`;
+      document.getElementById('roi-annual-savings').textContent = `$${annualDollars.toLocaleString('en-US')}`;
+      document.getElementById('roi-hours-saved').innerHTML = `Reclaims <strong>${annualHours} hours/year</strong> of executive focus.`;
+    }
+
+    function openCheckoutModal(planName, price) {
+      document.getElementById('checkout-plan-title').textContent = `${planName} — $${price}/mo`;
+      document.getElementById('checkout-price-note').textContent = `$${price}.00 / month`;
+      const modal = document.getElementById('checkout-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeCheckoutModal() {
+      const modal = document.getElementById('checkout-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function handleTrialSubmit(e) {
+      e.preventDefault();
+      // Redirect directly into the workspace app (replace with live Stripe Payment Link when ready)
+      window.location.href = 'app.html';
+    }
+  </script>
+</body>
+</html>
