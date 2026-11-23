@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ZEUS ONE — Executive Pulse | Zero-Export Cross-Platform Rollup</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Inter & JetBrains Mono Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
+  <!-- Font Awesome for crisp UI & Integration Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            obsidian: '#080B12',
+            surface: '#0F172A',
+            card: '#111827',
+            borderline: '#1E293B',
+            zeus: {
+              DEFAULT: '#F59E0B',
+              dark: '#D97706',
+              light: '#FBBF24',
+            },
+            electric: {
+              DEFAULT: '#38BDF8',
+              dark: '#0EA5E9',
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      background-color: #080B12;
+      color: #F8FAFC;
+      font-family: 'Inter', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+    .zeus-glow {
+      box-shadow: 0 0 28px -6px rgba(245, 158, 11, 0.25);
+    }
+    .electric-glow {
+      box-shadow: 0 0 24px -6px rgba(56, 189, 248, 0.2);
+    }
+    /* Custom subtle scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #080B12;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1E293B;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #334155;
+    }
+    @keyframes pulseSync {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .animate-sync {
+      animation: pulseSync 1.1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-amber-500/30 selection:text-amber-200">
+
+  <!-- Toast Notification Banner (No alert() ever) -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none max-w-sm w-full px-4 sm:px-0"></div>
+
+  <!-- Top Navigation Header -->
+  <header class="sticky top-0 z-40 bg-[#080B12]/90 backdrop-blur-md border-b border-[#1E293B]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-wrap items-center justify-between py-3.5 gap-3">
+        
+        <!-- Brand Logo & Identity -->
+        <div class="flex items-center gap-3.5">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 via-amber-500 to-amber-700 flex items-center justify-center text-slate-950 font-extrabold text-xl shadow-lg shadow-amber-500/20">
+            <i class="fa-solid fa-bolt"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-extrabold tracking-tight text-lg text-white">ZEUS ONE</span>
+              <span class="text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-400 border border-amber-500/30">
+                Executive Pulse
+              </span>
+            </div>
+            <p class="text-xs text-slate-400 hidden sm:block">
+              Zero-Export Cross-Platform Rollup &bull; <span class="text-slate-500">zeusone.profitharborai.com</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Mode Switcher Tabs (Single Workspace vs. Fractional CFO Agency Hub vs. Plans) -->
+        <nav class="flex items-center bg-[#0F172A] p-1 rounded-xl border border-[#1E293B] order-3 lg:order-2 w-full lg:w-auto justify-between sm:justify-start">
+          <button onclick="switchView('pulse')" id="tab-pulse" class="flex-1 sm:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-amber-500 text-slate-950 shadow">
+            <i class="fa-solid fa-wave-square mr-1.5"></i>Executive Pulse
+          </button>
+          <button onclick="switchView('agency')" id="tab-agency" class="flex-1 sm:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-300 hover:text-white transition-all">
+            <i class="fa-solid fa-building-shield mr-1.5 text-sky-400"></i>Fractional CFO Hub
+          </button>
+          <button onclick="switchView('pricing')" id="tab-pricing" class="flex-1 sm:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-300 hover:text-white transition-all">
+            <i class="fa-solid fa-layer-group mr-1.5 text-amber-400"></i>SaaS Tiers
+          </button>
+        </nav>
+
+        <!-- Workspace Selector & Standalone Export -->
+        <div class="flex items-center gap-2.5 order-2 lg:order-3">
+          <div class="relative">
+            <select id="workspace-select" onchange="changeWorkspace(this.value)" aria-label="Select Business Workspace"
+              class="appearance-none bg-[#111827] hover:bg-[#1E293B]/80 text-slate-100 text-xs sm:text-sm font-medium pl-3.5 pr-9 py-2 rounded-xl border border-[#1E293B] focus:outline-none focus:border-amber-500 transition-colors cursor-pointer">
+              <option value="apex">Apex E-Commerce Co. (Shopify + Stripe + Meta)</option>
+              <option value="vanguard">Vanguard B2B Agency (QuickBooks + Stripe + HubSpot)</option>
+              <option value="metro">Metro Multi-Location Retail (Square + Gusto + QBO)</option>
+            </select>
+            <i class="fa-solid fa-chevron-down text-xs text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+          </div>
+
+          <button onclick="downloadStandaloneApp()" title="Download Standalone HTML App"
+            class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#0F172A] hover:bg-[#1E293B] text-slate-300 hover:text-white text-xs font-medium border border-[#1E293B] transition-all">
+            <i class="fa-solid fa-download text-sky-400"></i>
+            <span>Export App</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN APPLICATION CONTAINER -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+    <!-- =================================================================== -->
+    <!-- VIEW 1: EXECUTIVE PULSE (CORE WORKSPACE ROLLUP & CUSTOMIZER)        -->
+    <!-- =================================================================== -->
+    <section id="view-pulse" class="space-y-6">
+
+      <!-- Live Cross-Platform Integration Status Bar -->
+      <div class="bg-[#0F172A] border border-[#1E293B] rounded-2xl p-4 sm:p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div class="space-y-2">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/25 px-2.5 py-0.5 rounded-full">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              Read-Only OAuth Pipeline Active
+            </span>
+            <span id="last-sync-label" class="text-xs text-slate-400 font-mono">
+              Last deterministic rollup: Nov 23, 2026 &bull; 06:00 AM MST
+            </span>
+          </div>
+
+          <!-- Active Connected Pills -->
+          <div id="connected-apps-bar" class="flex flex-wrap items-center gap-2 pt-1">
+            <!-- Populated dynamically via JS -->
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2.5 shrink-0">
+          <button onclick="openOAuthModal()"
+            class="px-3.5 py-2.5 rounded-xl bg-[#111827] hover:bg-[#1E293B] text-slate-200 text-xs sm:text-sm font-semibold border border-[#1E293B] transition-all flex items-center gap-2">
+            <i class="fa-solid fa-plug-circle-plus text-sky-400"></i>
+            <span>Connect Data Source</span>
+          </button>
+
+          <button id="sync-now-btn" onclick="runInstantRollupSync()"
+            class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 text-xs sm:text-sm font-bold shadow-lg shadow-amber-500/20 transition-all flex items-center gap-2">
+            <i id="sync-icon" class="fa-solid fa-arrows-rotate"></i>
+            <span id="sync-btn-text">Run Instant Rollup Sync</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Two-Column Workspace Layout: Left = Monday Executive Digest Preview | Right = Push & Threshold Customizer -->
+      <div class="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
+
+        <!-- LEFT COLUMN (7 cols): THE CORE DELIVERABLE — MONDAY MORNING EXECUTIVE DIGEST -->
+        <div class="xl:col-span-7 space-y-5">
+          <div class="bg-[#111827] border border-[#1E293B] rounded-2xl overflow-hidden zeus-glow">
+            
+            <!-- Digest Header Strip -->
+            <div class="bg-gradient-to-r from-[#0F172A] via-[#131C31] to-[#0F172A] px-5 sm:px-7 py-5 border-b border-[#1E293B] flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-amber-400 mb-1">
+                  <i class="fa-solid fa-bolt"></i>
+                  <span>Monday 7:00 AM Push Brief &bull; Zero CSV Exports</span>
+                </div>
+                <h1 id="digest-title" class="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
+                  Weekly Executive Pulse — Nov 16–22, 2026
+                </h1>
+                <p id="digest-subtitle" class="text-xs sm:text-sm text-slate-400 mt-0.5">
+                  Consolidated for <strong class="text-slate-200">Apex E-Commerce Co.</strong> across 3 verified sources
+                </p>
+              </div>
+              <div class="text-right">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-sky-500/10 border border-sky-500/25 text-sky-400 text-xs font-semibold">
+                  <i class="fa-solid fa-shield-check"></i> Deterministic Math Engine
+                </span>
+              </div>
+            </div>
+
+            <!-- 4 Core Executive Financial KPIs -->
+            <div class="p-5 sm:p-7 space-y-6">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                
+                <!-- KPI 1: Net Cash Flow -->
+                <div class="bg-[#080B12] border border-[#1E293B] rounded-xl p-4 hover:border-amber-500/40 transition-colors">
+                  <div class="flex items-center justify-between text-xs text-slate-400 mb-1.5">
+                    <span class="font-medium">Net Cash Flow (7d)</span>
+                    <span id="kpi-net-delta" class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/15 text-emerald-400 tabular-nums">
+                      ▲ +12.4% WoW
+                    </span>
+                  </div>
+                  <div id="kpi-net-value" class="text-2xl sm:text-3xl font-extrabold text-white tabular-nums tracking-tight">
+                    +$14,280
+                  </div>
+                  <div id="kpi-net-bench" class="text-xs text-slate-400 mt-2 flex items-center justify-between">
+                    <span>90-day weekly avg: <strong class="text-slate-300 tabular-nums">$12,705</strong></span>
+                    <span class="text-emerald-400 font-medium">Above target</span>
+                  </div>
+                </div>
+
+                <!-- KPI 2: Gross Revenue -->
+                <div class="bg-[#080B12] border border-[#1E293B] rounded-xl p-4 hover:border-sky-500/40 transition-colors">
+                  <div class="flex items-center justify-between text-xs text-slate-400 mb-1.5">
+                    <span class="font-medium">Gross Revenue Settled</span>
+                    <span id="kpi-rev-delta" class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/15 text-emerald-400 tabular-nums">
+                      ▲ +4.2% WoW
+                    </span>
+                  </div>
+                  <div id="kpi-rev-value" class="text-2xl sm:text-3xl font-extrabold text-white tabular-nums tracking-tight">
+                    $48,900
+                  </div>
+                  <div id="kpi-rev-bench" class="text-xs text-slate-400 mt-2 flex items-center justify-between">
+                    <span>90-day weekly avg: <strong class="text-slate-300 tabular-nums">$46,920</strong></span>
+                    <span id="kpi-rev-source" class="text-sky-400 font-mono text-[11px]">Shopify + Stripe</span>
+                  </div>
+                </div>
+
+                <!-- KPI 3: Total Expenses & Ad Spend -->
+                <div class="bg-[#080B12] border border-[#1E293B] rounded-xl p-4 hover:border-slate-700 transition-colors">
+                  <div class="flex items-center justify-between text-xs text-slate-400 mb-1.5">
+                    <span class="font-medium">Total Outflows & Ad Spend</span>
+                    <span id="kpi-exp-delta" class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/15 text-emerald-400 tabular-nums">
+                      ▼ -2.1% WoW
+                    </span>
+                  </div>
+                  <div id="kpi-exp-value" class="text-2xl sm:text-3xl font-extrabold text-white tabular-nums tracking-tight">
+                    $34,620
+                  </div>
+                  <div id="kpi-exp-bench" class="text-xs text-slate-400 mt-2 flex items-center justify-between">
+                    <span>Contribution Margin: <strong id="kpi-margin-val" class="text-amber-400 tabular-nums">29.2%</strong></span>
+                    <span id="kpi-exp-source" class="text-slate-400 font-mono text-[11px]">Meta + Ops</span>
+                  </div>
+                </div>
+
+                <!-- KPI 4: Cash on Hand & Runway -->
+                <div class="bg-[#080B12] border border-[#1E293B] rounded-xl p-4 hover:border-sky-500/40 transition-colors">
+                  <div class="flex items-center justify-between text-xs text-slate-400 mb-1.5">
+                    <span class="font-medium">Operating Cash & Runway</span>
+                    <span id="kpi-runway-badge" class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-sky-500/15 text-sky-400 tabular-nums">
+                      5.2 Mos Runway
+                    </span>
+                  </div>
+                  <div id="kpi-cash-value" class="text-2xl sm:text-3xl font-extrabold text-white tabular-nums tracking-tight">
+                    $182,400
+                  </div>
+                  <div id="kpi-cash-bench" class="text-xs text-slate-400 mt-2 flex items-center justify-between">
+                    <span>Burn threshold: <strong id="kpi-min-runway-display" class="text-slate-300 tabular-nums">4.0 mos</strong></span>
+                    <span id="kpi-cash-status" class="text-emerald-400 font-medium">Healthy reserve</span>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Plain-English Executive Synthesis -->
+              <div class="bg-[#0F172A]/90 border border-[#1E293B] rounded-xl p-4">
+                <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-sky-400 mb-1.5">
+                  <i class="fa-solid fa-sparkles"></i>
+                  <span>Plain-English Executive Summary</span>
+                </div>
+                <p id="executive-narrative" class="text-sm text-slate-200 leading-relaxed">
+                  Net cash flow rose <strong>+12.4%</strong> to <strong>+$14,280</strong> on steady Shopify and Stripe settlement volume ($48,900). However, 3 silent operational leaks detected across refunds, overdue B2B receivables, and Meta Ad CAC require attention before Tuesday's payout cycle.
+                </p>
+              </div>
+
+              <!-- ITEMS REQUIRING ATTENTION (ANOMALY ENGINE) -->
+              <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                  <h2 class="text-sm font-bold uppercase tracking-wider text-white flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
+                    <span>Items Requiring Attention (<span id="anomaly-count">3</span>)</span>
+                  </h2>
+                  <span class="text-xs text-slate-400">Auto-triggered by your guardrails</span>
+                </div>
+
+                <div id="anomalies-list" class="space-y-3">
+                  <!-- Populated dynamically via JS -->
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN (5 cols): PUSH DELIVERY & ANOMALY GUARDRAIL CUSTOMIZER -->
+        <div class="xl:col-span-5 space-y-5">
+          
+          <!-- Push Delivery Channels & Schedule Card -->
+          <div class="bg-[#111827] border border-[#1E293B] rounded-2xl p-5 sm:p-6 space-y-5">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <h2 class="text-base font-bold text-white flex items-center gap-2">
+                  <i class="fa-solid fa-paper-plane text-amber-400"></i>
+                  <span>Push Delivery & Digest Customizer</span>
+                </h2>
+                <p class="text-xs text-slate-400 mt-0.5">
+                  No login required for stakeholders. Deliver directly where decisions happen.
+                </p>
+              </div>
+              <span class="text-[11px] font-mono px-2 py-1 rounded bg-[#080B12] border border-[#1E293B] text-slate-300">
+                Zero-Login
+              </span>
+            </div>
+
+            <!-- Delivery Channels Grid -->
+            <div class="space-y-2.5">
+              <label class="text-xs font-semibold uppercase tracking-wider text-slate-400 block">Active Push Channels</label>
+              
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <label class="flex items-center justify-between p-3 rounded-xl bg-[#080B12] border border-amber-500/40 cursor-pointer select-none">
+                  <div class="flex items-center gap-2.5">
+                    <i class="fa-solid fa-envelope text-amber-400"></i>
+                    <div>
+                      <div class="text-xs font-semibold text-white">HTML Email Brief</div>
+                      <div class="text-[11px] text-slate-400">execs@company.com</div>
+                    </div>
+                  </div>
+                  <input type="checkbox" id="ch-email" checked onchange="updateChannels()" class="accent-amber-500 w-4 h-4 rounded cursor-pointer" />
+                </label>
+
+                <label class="flex items-center justify-between p-3 rounded-xl bg-[#080B12] border border-sky-500/40 cursor-pointer select-none">
+                  <div class="flex items-center gap-2.5">
+                    <i class="fa-brands fa-slack text-sky-400"></i>
+                    <div>
+                      <div class="text-xs font-semibold text-white">Slack Webhook</div>
+                      <div class="text-[11px] text-slate-400">#exec-pulse</div>
+                    </div>
+                  </div>
+                  <input type="checkbox" id="ch-slack" checked onchange="updateChannels()" class="accent-amber-500 w-4 h-4 rounded cursor-pointer" />
+                </label>
+
+                <label class="flex items-center justify-between p-3 rounded-xl bg-[#080B12] border border-[#1E293B] cursor-pointer select-none hover:border-slate-700">
+                  <div class="flex items-center gap-2.5">
+                    <i class="fa-brands fa-microsoft text-indigo-400"></i>
+                    <div>
+                      <div class="text-xs font-semibold text-white">MS Teams Card</div>
+                      <div class="text-[11px] text-slate-400">Leadership Channel</div>
+                    </div>
+                  </div>
+                  <input type="checkbox" id="ch-teams" onchange="updateChannels()" class="accent-amber-500 w-4 h-4 rounded cursor-pointer" />
+                </label>
+
+                <label class="flex items-center justify-between p-3 rounded-xl bg-[#080B12] border border-[#1E293B] cursor-pointer select-none hover:border-slate-700">
+                  <div class="flex items-center gap-2.5">
+                    <i class="fa-solid fa-comment-sms text-emerald-400"></i>
+                    <div>
+                      <div class="text-xs font-semibold text-white">SMS TL;DR Alert</div>
+                      <div class="text-[11px] text-slate-400">Founder Mobile</div>
+                    </div>
+                  </div>
+                  <input type="checkbox" id="ch-sms" onchange="updateChannels()" class="accent-amber-500 w-4 h-4 rounded cursor-pointer" />
+                </label>
+              </div>
+            </div>
+
+            <!-- Schedule Selector -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label for="delivery-cadence" class="text-xs font-semibold text-slate-300 block mb-1">Cadence & Day</label>
+                <select id="delivery-cadence" onchange="showToast('Delivery schedule updated to ' + this.value, 'info')"
+                  class="w-full bg-[#080B12] border border-[#1E293B] rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-amber-500">
+                  <option value="Every Monday (Weekly Pulse)">Every Monday (Weekly Pulse)</option>
+                  <option value="Daily Morning Snapshot (7:00 AM)">Daily Morning Snapshot</option>
+                  <option value="1st & 15th Cash Close">1st &amp; 15th Cash Close</option>
+                </select>
+              </div>
+              <div>
+                <label for="delivery-time" class="text-xs font-semibold text-slate-300 block mb-1">Delivery Time</label>
+                <select id="delivery-time" onchange="showToast('Push time locked for ' + this.value, 'info')"
+                  class="w-full bg-[#080B12] border border-[#1E293B] rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-amber-500">
+                  <option value="07:00 AM Local">07:00 AM Local</option>
+                  <option value="06:30 AM Local">06:30 AM Local</option>
+                  <option value="08:00 AM Local">08:00 AM Local</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Anomaly Guardrail Threshold Sliders -->
+            <div class="pt-3 border-t border-[#1E293B] space-y-3.5">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Anomaly Detection Guardrails</span>
+                <button onclick="resetThresholds()" class="text-[11px] text-sky-400 hover:underline">Reset Defaults</button>
+              </div>
+
+              <!-- Threshold 1: Refund Rate Spike -->
+              <div>
+                <div class="flex justify-between text-xs mb-1">
+                  <span class="text-slate-300">Refund / Churn Spike Alert</span>
+                  <span id="val-refund-thresh" class="font-mono font-semibold text-amber-400 tabular-nums">&gt; 3.0%</span>
+                </div>
+                <input type="range" id="slider-refund" min="1.5" max="6.0" step="0.5" value="3.0" oninput="recalculateAnomalies()"
+                  class="w-full accent-amber-500 bg-[#080B12] h-1.5 rounded-lg cursor-pointer" />
+              </div>
+
+              <!-- Threshold 2: Overdue Invoice Days -->
+              <div>
+                <div class="flex justify-between text-xs mb-1">
+                  <span class="text-slate-300">Overdue Invoice Aging Trigger</span>
+                  <span id="val-invoice-thresh" class="font-mono font-semibold text-amber-400 tabular-nums">&gt; 30 Days</span>
+                </div>
+                <input type="range" id="slider-invoice" min="15" max="60" step="5" value="30" oninput="recalculateAnomalies()"
+                  class="w-full accent-amber-500 bg-[#080B12] h-1.5 rounded-lg cursor-pointer" />
+              </div>
+
+              <!-- Threshold 3: Minimum Cash Runway -->
+              <div>
+                <div class="flex justify-between text-xs mb-1">
+                  <span class="text-slate-300">Minimum Cash Runway Floor</span>
+                  <span id="val-runway-thresh" class="font-mono font-semibold text-sky-400 tabular-nums">&lt; 4.0 Mos</span>
+                </div>
+                <input type="range" id="slider-runway" min="2.0" max="8.0" step="0.5" value="4.0" oninput="recalculateAnomalies()"
+                  class="w-full accent-sky-400 bg-[#080B12] h-1.5 rounded-lg cursor-pointer" />
+              </div>
+            </div>
+
+            <!-- Action Button: Preview & Test Push Delivery -->
+            <div class="pt-2">
+              <button onclick="openPushPreviewModal()"
+                class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-slate-950 font-bold text-sm shadow-lg shadow-sky-500/20 transition-all flex items-center justify-center gap-2">
+                <i class="fa-solid fa-eye"></i>
+                <span>Preview &amp; Test Push Delivery (Email / Slack)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Value & ROI Calculator Mini-Card -->
+          <div class="bg-[#0F172A] border border-[#1E293B] rounded-2xl p-5 flex items-center justify-between gap-4">
+            <div>
+              <div class="text-xs font-semibold text-amber-400 uppercase tracking-wider">Admin Time Saved</div>
+              <div class="text-lg font-extrabold text-white mt-0.5 tabular-nums">~14.5 hrs / month</div>
+              <p class="text-xs text-slate-400 mt-0.5">Replaces manual CSV exports across QuickBooks, Stripe &amp; Ads.</p>
+            </div>
+            <div class="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-xl shrink-0">
+              <i class="fa-solid fa-clock-rotate-left"></i>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- VIEW 2: FRACTIONAL CFO & MULTI-CLIENT AGENCY ROLLUP HUB             -->
+    <!-- =================================================================== -->
+    <section id="view-agency" class="hidden space-y-6">
+      
+      <div class="bg-gradient-to-r from-[#0F172A] via-[#111827] to-[#0F172A] border border-[#1E293B] rounded-2xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="space-y-1">
+          <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-sky-400">
+            <i class="fa-solid fa-briefcase"></i>
+            <span>B2B2B Partner Mode &bull; Fractional CFOs &amp; Bookkeeping Firms</span>
+          </div>
+          <h2 class="text-2xl font-extrabold text-white">White-Label Multi-Client Rollup Command</h2>
+          <p class="text-sm text-slate-400 max-w-2xl">
+            Manage 15 to 50+ SMB client workspaces from a single Zeus One partner console. Automatically dispatch branded Monday morning executive briefs under your advisory firm's identity.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3 shrink-0">
+          <div class="bg-[#080B12] border border-[#1E293B] rounded-xl px-4 py-2.5 text-right">
+            <div class="text-[11px] text-slate-400">Active Client Workspaces</div>
+            <div class="text-lg font-extrabold text-amber-400 tabular-nums">18 Clients <span class="text-xs font-normal text-emerald-400">(100% Synced)</span></div>
+          </div>
+          <button onclick="batchSendClientDigests()"
+            class="px-4 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs sm:text-sm shadow-lg shadow-amber-500/20 transition-all flex items-center gap-2">
+            <i class="fa-solid fa-paper-plane"></i>
+            <span>Dispatch All 18 Client Briefs</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Client Portfolio Table -->
+      <div class="bg-[#111827] border border-[#1E293B] rounded-2xl overflow-hidden">
+        <div class="px-6 py-4 border-b border-[#1E293B] flex flex-wrap items-center justify-between gap-2">
+          <h3 class="font-bold text-white text-sm sm:text-base">Client Portfolio Health &amp; Automated Monday Rollups</h3>
+          <span class="text-xs text-slate-400">Click any client to inspect their live pulse</span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-[#080B12] text-[11px] uppercase tracking-wider text-slate-400 border-b border-[#1E293B]">
+                <th class="py-3.5 px-6 font-semibold">Client Business</th>
+                <th class="py-3.5 px-4 font-semibold">Connected Stack</th>
+                <th class="py-3.5 px-4 font-semibold text-right">7d Net Cash</th>
+                <th class="py-3.5 px-4 font-semibold text-right">Runway</th>
+                <th class="py-3.5 px-4 font-semibold">Alert Status</th>
+                <th class="py-3.5 px-6 font-semibold text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#1E293B] text-sm">
+              <tr class="hover:bg-[#0F172A]/70 transition-colors">
+                <td class="py-4 px-6">
+                  <div class="font-bold text-white">Apex E-Commerce Co.</div>
+                  <div class="text-xs text-slate-400">DTC Apparel &bull; $2.5M ARR</div>
+                </td>
+                <td class="py-4 px-4 font-mono text-xs text-sky-400">Shopify, Stripe, Meta Ads</td>
+                <td class="py-4 px-4 text-right font-bold text-emerald-400 tabular-nums">+$14,280</td>
+                <td class="py-4 px-4 text-right text-slate-200 tabular-nums">5.2 mos</td>
+                <td class="py-4 px-4">
+                  <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-500/15 text-rose-400 border border-rose-500/25">
+                    3 Leaks Flagged
+                  </span>
+                </td>
+                <td class="py-4 px-6 text-right">
+                  <button onclick="inspectClientWorkspace('apex')" class="px-3 py-1.5 rounded-lg bg-[#080B12] hover:bg-amber-500 hover:text-slate-950 text-xs font-semibold text-slate-200 border border-[#1E293B] transition-all">
+                    Open Pulse
+                  </button>
+                </td>
+              </tr>
+
+              <tr class="hover:bg-[#0F172A]/70 transition-colors">
+                <td class="py-4 px-6">
+                  <div class="font-bold text-white">Vanguard B2B Agency</div>
+                  <div class="text-xs text-slate-400">Growth Consultancy &bull; 24 Staff</div>
+                </td>
+                <td class="py-4 px-4 font-mono text-xs text-sky-400">QuickBooks, Stripe, HubSpot</td>
+                <td class="py-4 px-4 text-right font-bold text-emerald-400 tabular-nums">+$22,640</td>
+                <td class="py-4 px-4 text-right text-slate-200 tabular-nums">6.8 mos</td>
+                <td class="py-4 px-4">
+                  <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/15 text-amber-400 border border-amber-500/25">
+                    2 Aging Invoices
+                  </span>
+                </td>
+                <td class="py-4 px-6 text-right">
+                  <button onclick="inspectClientWorkspace('vanguard')" class="px-3 py-1.5 rounded-lg bg-[#080B12] hover:bg-amber-500 hover:text-slate-950 text-xs font-semibold text-slate-200 border border-[#1E293B] transition-all">
+                    Open Pulse
+                  </button>
+                </td>
+              </tr>
+
+              <tr class="hover:bg-[#0F172A]/70 transition-colors">
+                <td class="py-4 px-6">
+                  <div class="font-bold text-white">Metro Multi-Location Retail</div>
+                  <div class="text-xs text-slate-400">4 Brick-and-Mortar Stores</div>
+                </td>
+                <td class="py-4 px-4 font-mono text-xs text-sky-400">Square POS, Gusto, QuickBooks</td>
+                <td class="py-4 px-4 text-right font-bold text-emerald-400 tabular-nums">+$9,410</td>
+                <td class="py-4 px-4 text-right text-rose-400 font-semibold tabular-nums">3.1 mos</td>
+                <td class="py-4 px-4">
+                  <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-500/15 text-rose-400 border border-rose-500/25">
+                    Labor Ratio + Runway Alert
+                  </span>
+                </td>
+                <td class="py-4 px-6 text-right">
+                  <button onclick="inspectClientWorkspace('metro')" class="px-3 py-1.5 rounded-lg bg-[#080B12] hover:bg-amber-500 hover:text-slate-950 text-xs font-semibold text-slate-200 border border-[#1E293B] transition-all">
+                    Open Pulse
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- VIEW 3: MONETIZATION & COMMERCIAL PACKAGING TIERS                   -->
+    <!-- =================================================================== -->
+    <section id="view-pricing" class="hidden space-y-6">
+      <div class="text-center max-w-2xl mx-auto space-y-2 pt-2">
+        <span class="text-xs font-bold uppercase tracking-wider text-amber-400">Zeus One Commercial Packaging</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Built to Scale from Single SMBs to Multi-Entity Enterprises</h2>
+        <p class="text-sm text-slate-400">
+          Read-only OAuth security, zero dashboard bloat, and instant ROI by eliminating manual weekly spreadsheet rollups.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <!-- Tier 1: SMB Growth -->
+        <div class="bg-[#111827] border border-[#1E293B] rounded-2xl p-6 flex flex-col justify-between space-y-6">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-bold text-white">SMB Pulse</span>
+              <span class="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300">5–30 Staff</span>
+            </div>
+            <div>
+              <span class="text-3xl font-extrabold text-white tabular-nums">$79</span>
+              <span class="text-xs text-slate-400"> / month</span>
+            </div>
+            <p class="text-xs text-slate-400">Stop spending Sunday nights in spreadsheets; know your real profit every Monday morning.</p>
+            <ul class="space-y-2.5 text-xs text-slate-300 pt-2 border-t border-[#1E293B]">
+              <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> Up to 3 Read-Only Integrations</li>
+              <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> Weekly Monday 7:00 AM Email &amp; SMS Digest</li>
+              <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> 3 Core Anomaly Guardrails</li>
+              <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> 90-Day Trailing Benchmark Engine</li>
+            </ul>
+          </div>
+          <button onclick="showToast('Selected SMB Pulse ($79/mo) plan template', 'success')" class="w-full py-2.5 rounded-xl bg-[#080B12] hover:bg-[#1E293B] border border-[#1E293B] text-white text-xs font-bold transition-all">
+            Activate SMB Workspace
+          </button>
+        </div>
+
+        <!-- Tier 2: Mid-Market Command (Highlighted) -->
+        <div class="bg-[#111827] border-2 border-amber-500 rounded-2xl p-6 flex flex-col justify-between space-y-6 zeus-glow relative">
+          <div class="absolute -top-3 right-6 bg-amber-500 text-slate-950 text-[10px] font-extrabold uppercase tracking-wider px-3 py-0.5 rounded-full">
+            Most Popular
+          </div>
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-bold text-amber-400">Mid-Market Command</span>
+              <span class="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300">30–250 Staff</span>
+            </div>
+            <div>
+              <span class="text-3xl font-extrabold text-white tabular-nums">$349</span>
+              <span class="text-xs text-slate-400"> / month</span>
+            </div>
+            <p class="text-xs text-slate-400">Automated department &amp; multi-location rollups pushed straight into Slack and Microsoft Teams.</p>
+            <ul class="space-y-2.5 text-xs text-slate-200 pt-2 border-t border-[#1E293B]">
+              <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-400"></i> Unlimited Data Sources &amp; Entities</li>
+              <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-400"></i> Slack, MS Teams, Email &amp; SMS Push</li>
+              <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-400"></i> Custom Anomaly Thresholds &amp; Instant Alerts</li>
+              <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-400"></i> Multi-Location Labor &amp; Margin Rollups</li>
+            </ul>
+          </div>
+          <button onclick="showToast('Selected Mid-Market Command ($349/mo) plan template', 'success')" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold transition-all shadow-lg shadow-amber-500/20">
+            Launch Mid-Market Rollup
+          </button>
+        </div>
+
+        <!-- Tier 3: Fractional CFO & Agency Partner -->
+        <div class="bg-[#111827] border border-[#1E293B] rounded-2xl p-6 flex flex-col justify-between space-y-6">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-bold text-sky-400">Fractional CFO Partner</span>
+              <span class="text-xs px-2.5 py-0.5 rounded-full bg-sky-500/15 text-sky-300">Up to 25 Clients</span>
+            </div>
+            <div>
+              <span class="text-3xl font-extrabold text-white tabular-nums">$599</span>
+              <span class="text-xs text-slate-400"> / month</span>
+            </div>
+            <p class="text-xs text-slate-400">White-labeled weekly client briefs dispatched automatically under your advisory firm's brand.</p>
+            <ul class="space-y-2.5 text-xs text-slate-300 pt-2 border-t border-[#1E293B]">
+              <li class="flex items-center gap-2"><i class="fa-solid fa-check text-sky-400"></i> 25 Client Workspaces Included</li>
+              <li class="flex items-center gap-2"><i class="fa-solid fa-check text-sky-400"></i> Custom Firm Logo &amp; Sender Domain</li>
+              <li class="flex items-center gap-2"><i class="fa-solid fa-check text-sky-400"></i> Cross-Portfolio Risk Triage Dashboard</li>
+              <li class="flex items-center gap-2"><i class="fa-solid fa-check text-sky-400"></i> One-Click Client Onboarding Links</li>
+            </ul>
+          </div>
+          <button onclick="switchView('agency'); showToast('Switched to Fractional CFO Partner Console', 'info')" class="w-full py-2.5 rounded-xl bg-[#080B12] hover:bg-[#1E293B] border border-sky-500/40 text-sky-400 text-xs font-bold transition-all">
+            Open Partner Console
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-[#1E293B] bg-[#080B12] py-5 px-4 sm:px-6 lg:px-8 mt-10">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+      <div class="flex items-center gap-2">
+        <span class="font-bold text-slate-300">ZEUS ONE</span>
+        <span>&bull;</span>
+        <span>Executive Pulse Zero-Export Engine</span>
+      </div>
+      <div>
+        Powered by <span class="text-amber-500/90 font-semibold">ProfitHarborAI</span> &bull; <span class="font-mono">zeusone.profitharborai.com</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- =================================================================== -->
+  <!-- MODAL 1: ONE-CLICK READ-ONLY OAUTH DATA SOURCE CONNECTOR            -->
+  <!-- =================================================================== -->
+  <div id="oauth-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/75 backdrop-blur-sm p-4">
+    <div class="bg-[#111827] border border-[#1E293B] rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl">
+      <div class="px-6 py-4 border-b border-[#1E293B] flex items-center justify-between bg-[#0F172A]">
+        <div>
+          <h3 class="font-bold text-white text-base flex items-center gap-2">
+            <i class="fa-solid fa-lock text-emerald-400"></i>
+            <span>Read-Only OAuth Data Connectors</span>
+          </h3>
+          <p class="text-xs text-slate-400">Zeus One never requests write permissions or stores raw credentials.</p>
+        </div>
+        <button onclick="closeOAuthModal()" class="text-slate-400 hover:text-white p-1.5 rounded-lg">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <div id="oauth-connectors-list" class="p-6 space-y-3 max-h-[65vh] overflow-y-auto">
+        <!-- Populated dynamically via JS -->
+      </div>
+
+      <div class="px-6 py-4 border-t border-[#1E293B] bg-[#080B12] flex items-center justify-between">
+        <span class="text-xs text-slate-400">Changes recalculate your Monday digest immediately.</span>
+        <button onclick="closeOAuthModal()" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold">
+          Done
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =================================================================== -->
+  <!-- MODAL 2: PUSH DELIVERY PREVIEW (HTML EMAIL & SLACK CARD)            -->
+  <!-- =================================================================== -->
+  <div id="push-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/75 backdrop-blur-sm p-4">
+    <div class="bg-[#111827] border border-[#1E293B] rounded-2xl max-w-2xl w-full overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+      
+      <div class="px-6 py-4 border-b border-[#1E293B] flex flex-wrap items-center justify-between gap-2 bg-[#0F172A]">
+        <div class="flex items-center gap-2">
+          <span class="font-bold text-white text-base">Push Delivery Artifact Preview</span>
+          <div class="flex bg-[#080B12] p-0.5 rounded-lg border border-[#1E293B] ml-2">
+            <button id="preview-btn-email" onclick="switchPreviewFormat('email')" class="px-2.5 py-1 rounded-md text-xs font-semibold bg-amber-500 text-slate-950">
+              HTML Email
+            </button>
+            <button id="preview-btn-slack" onclick="switchPreviewFormat('slack')" class="px-2.5 py-1 rounded-md text-xs font-semibold text-slate-300 hover:text-white">
+              Slack Webhook
+            </button>
+          </div>
+        </div>
+        <button onclick="closePushPreviewModal()" class="text-slate-400 hover:text-white p-1.5 rounded-lg">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Rendered Preview Body -->
+      <div id="push-preview-body" class="p-6 overflow-y-auto space-y-4 bg-[#080B12] flex-1">
+        <!-- Populated dynamically via JS -->
+      </div>
+
+      <!-- Modal Footer Actions -->
+      <div class="px-6 py-4 border-t border-[#1E293B] bg-[#0F172A] flex flex-wrap items-center justify-between gap-3">
+        <button onclick="copyDigestToClipboard()" class="px-3.5 py-2 rounded-xl bg-[#111827] hover:bg-[#1E293B] border border-[#1E293B] text-slate-200 text-xs font-semibold flex items-center gap-2">
+          <i class="fa-solid fa-copy text-sky-400"></i>
+          <span>Copy Formatted Brief</span>
+        </button>
+
+        <div class="flex items-center gap-2">
+          <button onclick="closePushPreviewModal()" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white">
+            Close
+          </button>
+          <button onclick="triggerSimulatedTestSend()" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-extrabold flex items-center gap-2 shadow-lg shadow-emerald-500/20">
+            <i class="fa-solid fa-paper-plane"></i>
+            <span>Send Test Push Now</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- =================================================================== -->
+  <!-- APPLICATION LOGIC (DETERMINISTIC MATH + INTERACTIVE STATE)          -->
+  <!-- =================================================================== -->
+  <script>
+    // 1. MASTER WORKSPACE DATASETS
+    const WORKSPACES = {
+      apex: {
+        id: 'apex',
+        name: 'Apex E-Commerce Co.',
+        industry: 'DTC E-Commerce',
+        period: 'Weekly Executive Pulse — Nov 16–22, 2026',
+        connectors: ['shopify', 'stripe', 'meta'],
+        metrics: {
+          grossRevenue: 48900,
+          revDeltaPct: 4.2,
+          rev90dAvg: 46920,
+          revSources: 'Shopify + Stripe',
+          totalExpenses: 34620,
+          expDeltaPct: -2.1,
+          expSources: 'Meta Ads + COGS',
+          cashOnHand: 182400,
+          runwayMonths: 5.2,
+          refundRatePct: 4.8,
+          refund90dAvgPct: 1.9,
+          refundAmount: 2340,
+          overdueInvoicesCount: 4,
+          overdueInvoicesAmount: 8150,
+          maxInvoiceAgeDays: 34,
+          adSpendDeltaPct: 18.0,
+          adConvDeltaPct: 0.4
+        },
+        narrative:
+          'Net cash flow rose <strong>+12.4%</strong> to <strong>+$14,280</strong> on steady Shopify and Stripe settlement volume ($48,900). However, silent operational leaks across elevated SKU refunds, aging B2B wholesale invoices, and Meta Ad CAC require attention before Tuesday’s payout cycle.'
+      },
+      vanguard: {
+        id: 'vanguard',
+        name: 'Vanguard B2B Agency',
+        industry: 'B2B Growth Consultancy',
+        period: 'Weekly Executive Pulse — Nov 16–22, 2026',
+        connectors: ['quickbooks', 'stripe', 'hubspot'],
+        metrics: {
+          grossRevenue: 64200,
+          revDeltaPct: 8.6,
+          rev90dAvg: 59100,
+          revSources: 'QuickBooks + Stripe',
+          totalExpenses: 41560,
+          expDeltaPct: 1.4,
+          expSources: 'Payroll + Contractors',
+          cashOnHand: 284000,
+          runwayMonths: 6.8,
+          refundRatePct: 0.8,
+          refund90dAvgPct: 0.7,
+          refundAmount: 510,
+          overdueInvoicesCount: 6,
+          overdueInvoicesAmount: 24800,
+          maxInvoiceAgeDays: 42,
+          adSpendDeltaPct: 4.0,
+          adConvDeltaPct: 6.2
+        },
+        narrative:
+          'Retainer collections surged <strong>+8.6%</strong> to <strong>$64,200</strong> with strong HubSpot pipeline conversion. The primary cash drag is <strong>$24,800</strong> locked in 6 overdue B2B retainer invoices in QuickBooks averaging 42 days past due.'
+      },
+      metro: {
+        id: 'metro',
+        name: 'Metro Multi-Location Retail',
+        industry: '4-Store Brick & Mortar',
+        period: 'Weekly Executive Pulse — Nov 16–22, 2026',
+        connectors: ['square', 'gusto', 'quickbooks'],
+        metrics: {
+          grossRevenue: 53400,
+          revDeltaPct: -1.8,
+          rev90dAvg: 54380,
+          revSources: 'Square POS (4 Stores)',
+          totalExpenses: 43990,
+          expDeltaPct: 5.4,
+          expSources: 'Gusto Payroll + Inventory',
+          cashOnHand: 136500,
+          runwayMonths: 3.1,
+          refundRatePct: 3.6,
+          refund90dAvgPct: 1.5,
+          refundAmount: 1920,
+          overdueInvoicesCount: 2,
+          overdueInvoicesAmount: 3900,
+          maxInvoiceAgeDays: 28,
+          adSpendDeltaPct: 2.0,
+          adConvDeltaPct: 1.5
+        },
+        narrative:
+          'Store #3 (Scottsdale) saw overtime payroll in Gusto push labor-to-revenue ratio to 38.4%, compressing weekly net cash flow to <strong>+$9,410</strong> and bringing operating cash runway to <strong>3.1 months</strong>—below your 4.0-month safety guardrail.'
+      }
+    };
+
+    // Catalog of available OAuth Data Sources
+    const CONNECTOR_CATALOG = {
+      stripe: { id: 'stripe', name: 'Stripe', category: 'Payments & Subscriptions', icon: 'fa-brands fa-stripe-s', color: 'text-indigo-400', scope: 'read_only:charges,payouts,refunds' },
+      quickbooks: { id: 'quickbooks', name: 'QuickBooks Online', category: 'General Ledger & AR/AP', icon: 'fa-solid fa-book-open', color: 'text-emerald-400', scope: 'read_only:invoices,accounts,pnl' },
+      shopify: { id: 'shopify', name: 'Shopify Plus', category: 'E-Commerce Orders & Returns', icon: 'fa-brands fa-shopify', color: 'text-lime-400', scope: 'read_only:orders,refunds,settlements' },
+      meta: { id: 'meta', name: 'Meta Ads Manager', category: 'Paid Acquisition Spend', icon: 'fa-brands fa-meta', color: 'text-sky-400', scope: 'ads_read:campaigns,spend,roas' },
+      gusto: { id: 'gusto', name: 'Gusto Payroll', category: 'Payroll & Labor Burden', icon: 'fa-solid fa-users-gear', color: 'text-rose-400', scope: 'read_only:payrolls,departments' },
+      hubspot: { id: 'hubspot', name: 'HubSpot CRM', category: 'Pipeline & Closed-Won', icon: 'fa-brands fa-hubspot', color: 'text-orange-400', scope: 'crm.objects.deals.read' },
+      square: { id: 'square', name: 'Square POS', category: 'Multi-Location Retail POS', icon: 'fa-solid fa-cash-register', color: 'text-slate-200', scope: 'PAYMENTS_READ,ORDERS_READ' }
+    };
+
+    // Application State
+    let currentWorkspaceKey = 'apex';
+    let currentPreviewFormat = 'email';
+    let syncMultiplier = 1.0;
+
+    // Format Currency Helper
+    function formatUSD(amount, showPlus = false) {
+      const absVal = Math.abs(Math.round(amount)).toLocaleString('en-US');
+      if (amount < 0) return `-$${absVal}`;
+      return showPlus ? `+$${absVal}` : `$${absVal}`;
+    }
+
+    // Initialize Dashboard on Load
+    window.addEventListener('DOMContentLoaded', () => {
+      renderDashboard();
+    });
+
+    // Switch Top-Level Tabs
+    function switchView(viewName) {
+      ['pulse', 'agency', 'pricing'].forEach((v) => {
+        const el = document.getElementById(`view-${v}`);
+        const tab = document.getElementById(`tab-${v}`);
+        if (v === viewName) {
+          el.classList.remove('hidden');
+          tab.className = 'flex-1 sm:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-amber-500 text-slate-950 shadow';
+        } else {
+          el.classList.add('hidden');
+          tab.className = 'flex-1 sm:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-300 hover:text-white transition-all';
+        }
+      });
+    }
+
+    // Change Active Business Workspace
+    function changeWorkspace(key) {
+      currentWorkspaceKey = key;
+      syncMultiplier = 1.0;
+      renderDashboard();
+      showToast(`Switched workspace to ${WORKSPACES[key].name}`, 'info');
+    }
+
+    // Inspect Client from Fractional CFO Agency Table
+    function inspectClientWorkspace(key) {
+      document.getElementById('workspace-select').value = key;
+      currentWorkspaceKey = key;
+      syncMultiplier = 1.0;
+      switchView('pulse');
+      renderDashboard();
+      showToast(`Loaded ${WORKSPACES[key].name} into Executive Pulse`, 'success');
+    }
+
+    // Core Render Function (Deterministic Calculations)
+    function renderDashboard() {
+      const ws = WORKSPACES[currentWorkspaceKey];
+      const m = ws.metrics;
+
+      // Apply live sync jitter if user clicked "Run Instant Rollup Sync"
+      const rev = Math.round(m.grossRevenue * syncMultiplier);
+      const exp = Math.round(m.totalExpenses * (2 - syncMultiplier));
+      const netCash = rev - exp;
+      const marginPct = ((netCash / rev) * 100).toFixed(1);
+
+      // Update Header & Digest Titles
+      document.getElementById('digest-title').textContent = ws.period;
+      document.getElementById('digest-subtitle').innerHTML =
+        `Consolidated for <strong class="text-slate-200">${ws.name}</strong> across ${ws.connectors.length} verified read-only sources`;
+
+      // Update Connected Apps Bar
+      const appsBar = document.getElementById('connected-apps-bar');
+      appsBar.innerHTML = ws.connectors
+        .map((cKey) => {
+          const app = CONNECTOR_CATALOG[cKey];
+          if (!app) return '';
+          return `
+            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-[#111827] border border-[#1E293B] text-xs font-medium text-slate-200">
+              <i class="${app.icon} ${app.color}"></i>
+              <span>${app.name}</span>
+              <span class="text-[10px] font-mono text-emerald-400">● OK</span>
+            </span>
+          `;
+        })
+        .join('');
+
+      // Update KPI Cards
+      document.getElementById('kpi-net-value').textContent = formatUSD(netCash, true);
+      document.getElementById('kpi-rev-value').textContent = formatUSD(rev, false);
+      document.getElementById('kpi-rev-delta').textContent = `${m.revDeltaPct >= 0 ? '▲ +' : '▼ '}${m.revDeltaPct}% WoW`;
+      document.getElementById('kpi-rev-delta').className =
+        m.revDeltaPct >= 0
+          ? 'px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/15 text-emerald-400 tabular-nums'
+          : 'px-2 py-0.5 rounded-full text-[11px] font-semibold bg-rose-500/15 text-rose-400 tabular-nums';
+      document.getElementById('kpi-rev-source').textContent = m.revSources;
+
+      document.getElementById('kpi-exp-value').textContent = formatUSD(exp, false);
+      document.getElementById('kpi-exp-delta').textContent = `${m.expDeltaPct <= 0 ? '▼ ' : '▲ +'}${m.expDeltaPct}% WoW`;
+      document.getElementById('kpi-exp-delta').className =
+        m.expDeltaPct <= 0
+          ? 'px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/15 text-emerald-400 tabular-nums'
+          : 'px-2 py-0.5 rounded-full text-[11px] font-semibold bg-amber-500/15 text-amber-400 tabular-nums';
+      document.getElementById('kpi-margin-val').textContent = `${marginPct}%`;
+      document.getElementById('kpi-exp-source').textContent = m.expSources;
+
+      document.getElementById('kpi-cash-value').textContent = formatUSD(m.cashOnHand, false);
+      document.getElementById('kpi-runway-badge').textContent = `${m.runwayMonths.toFixed(1)} Mos Runway`;
+
+      document.getElementById('executive-narrative').innerHTML = ws.narrative;
+
+      // Recalculate Dynamic Anomaly Engine based on Sliders
+      recalculateAnomalies();
+    }
+
+    // Dynamic Anomaly Guardrail Evaluator
+    function recalculateAnomalies() {
+      const ws = WORKSPACES[currentWorkspaceKey];
+      const m = ws.metrics;
+
+      const refundThresh = parseFloat(document.getElementById('slider-refund').value);
+      const invoiceThresh = parseInt(document.getElementById('slider-invoice').value, 10);
+      const runwayThresh = parseFloat(document.getElementById('slider-runway').value);
+
+      document.getElementById('val-refund-thresh').textContent = `> ${refundThresh.toFixed(1)}%`;
+      document.getElementById('val-invoice-thresh').textContent = `> ${invoiceThresh} Days`;
+      document.getElementById('val-runway-thresh').textContent = `< ${runwayThresh.toFixed(1)} Mos`;
+      document.getElementById('kpi-min-runway-display').textContent = `${runwayThresh.toFixed(1)} mos`;
+
+      // Update Runway Card Status
+      const runwayBadge = document.getElementById('kpi-runway-badge');
+      const cashStatus = document.getElementById('kpi-cash-status');
+      if (m.runwayMonths < runwayThresh) {
+        runwayBadge.className = 'px-2 py-0.5 rounded-full text-[11px] font-semibold bg-rose-500/15 text-rose-400 tabular-nums';
+        cashStatus.textContent = 'Below floor alert';
+        cashStatus.className = 'text-rose-400 font-semibold';
+      } else {
+        runwayBadge.className = 'px-2 py-0.5 rounded-full text-[11px] font-semibold bg-sky-500/15 text-sky-400 tabular-nums';
+        cashStatus.textContent = 'Healthy reserve';
+        cashStatus.className = 'text-emerald-400 font-medium';
+      }
+
+      // Build Dynamic Anomaly Items
+      const anomalies = [];
+
+      if (m.refundRatePct > refundThresh) {
+        anomalies.push({
+          severity: 'high',
+          title: `Refund Rate Spike (${m.refundRatePct.toFixed(1)}% vs. ${refundThresh.toFixed(1)}% ceiling)`,
+          detail: `Refunds reached ${formatUSD(m.refundAmount)} this week compared to your 90-day average of ${m.refund90dAvgPct}%.`,
+          source: 'Stripe / Shopify'
+        });
+      }
+
+      if (m.maxInvoiceAgeDays > invoiceThresh) {
+        anomalies.push({
+          severity: 'medium',
+          title: `${m.overdueInvoicesCount} Overdue Invoices Past ${invoiceThresh}-Day Guardrail`,
+          detail: `${formatUSD(m.overdueInvoicesAmount)} in B2B receivables has aged up to ${m.maxInvoiceAgeDays} days past due.`,
+          source: 'QuickBooks Online'
+        });
+      }
+
+      if (m.runwayMonths < runwayThresh) {
+        anomalies.push({
+          severity: 'high',
+          title: `Cash Runway Floor Breached (${m.runwayMonths.toFixed(1)} mos < ${runwayThresh.toFixed(1)} mos)`,
+          detail: `Operating reserves (${formatUSD(m.cashOnHand)}) dipped below your ${runwayThresh.toFixed(1)}-month safety floor.`,
+          source: 'Treasury / GL'
+        });
+      }
+
+      if (m.adSpendDeltaPct - m.adConvDeltaPct > 10) {
+        anomalies.push({
+          severity: 'medium',
+          title: `Ad Efficiency Drift (+${m.adSpendDeltaPct}% Spend vs. +${m.adConvDeltaPct}% Conversions)`,
+          detail: `Paid acquisition spend scaled faster than attributed conversions, pushing blended CAC higher.`,
+          source: 'Meta Ads'
+        });
+      }
+
+      document.getElementById('anomaly-count').textContent = anomalies.length;
+      const listEl = document.getElementById('anomalies-list');
+
+      if (anomalies.length === 0) {
+        listEl.innerHTML = `
+          <div class="bg-emerald-500/10 border border-emerald-500/25 rounded-xl p-4 flex items-center gap-3 text-emerald-300 text-xs sm:text-sm">
+            <i class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
+            <span>All operational metrics are within your configured guardrails. Zero leaks flagged this cycle.</span>
+          </div>
+        `;
+        return;
+      }
+
+      listEl.innerHTML = anomalies
+        .map((item, idx) => {
+          const isHigh = item.severity === 'high';
+          const badgeClass = isHigh
+            ? 'bg-rose-500/15 text-rose-400 border-rose-500/30'
+            : 'bg-amber-500/15 text-amber-400 border-amber-500/30';
+          return `
+            <div class="bg-[#080B12] border border-[#1E293B] hover:border-slate-700 rounded-xl p-4 flex items-start justify-between gap-3">
+              <div class="space-y-1">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="text-xs font-bold text-white">${idx + 1}. ${item.title}</span>
+                  <span class="text-[10px] font-mono px-2 py-0.5 rounded border ${badgeClass}">${item.source}</span>
+                </div>
+                <p class="text-xs text-slate-400 leading-relaxed">${item.detail}</p>
+              </div>
+              <button onclick="showToast('Flagged for follow-up in Monday brief', 'info')"
+                class="shrink-0 text-xs text-sky-400 hover:text-sky-300 font-semibold px-2.5 py-1 rounded-lg bg-[#0F172A] border border-[#1E293B]">
+                Acknowledge
+              </button>
+            </div>
+          `;
+        })
+        .join('');
+    }
+
+    // Reset Guardrail Sliders to Defaults
+    function resetThresholds() {
+      document.getElementById('slider-refund').value = 3.0;
+      document.getElementById('slider-invoice').value = 30;
+      document.getElementById('slider-runway').value = 4.0;
+      recalculateAnomalies();
+      showToast('Anomaly guardrails reset to default thresholds', 'info');
+    }
+
+    // Run Instant Rollup Sync Animation & Recalculation
+    function runInstantRollupSync() {
+      const btn = document.getElementById('sync-now-btn');
+      const icon = document.getElementById('sync-icon');
+      const label = document.getElementById('sync-btn-text');
+
+      btn.disabled = true;
+      icon.classList.add('fa-spin');
+      label.textContent = 'Pulling OAuth APIs...';
+
+      setTimeout(() => {
+        syncMultiplier = syncMultiplier === 1.0 ? 1.018 : 1.0;
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        document.getElementById('last-sync-label').textContent = `Last deterministic rollup: Today • ${timeStr}`;
+
+        renderDashboard();
+        icon.classList.remove('fa-spin');
+        label.textContent = 'Run Instant Rollup Sync';
+        btn.disabled = false;
+        showToast('Cross-platform rollup synced and recalculated', 'success');
+      }, 650);
+    }
+
+    // Update Active Push Channels Feedback
+    function updateChannels() {
+      const active = [];
+      if (document.getElementById('ch-email').checked) active.push('Email');
+      if (document.getElementById('ch-slack').checked) active.push('Slack');
+      if (document.getElementById('ch-teams').checked) active.push('MS Teams');
+      if (document.getElementById('ch-sms').checked) active.push('SMS');
+      showToast(
+        active.length > 0 ? `Active push channels: ${active.join(', ')}` : 'Warning: No push delivery channels selected',
+        active.length > 0 ? 'info' : 'warning'
+      );
+    }
+
+    // OAuth Data Connectors Modal Controls
+    function openOAuthModal() {
+      const ws = WORKSPACES[currentWorkspaceKey];
+      const list = document.getElementById('oauth-connectors-list');
+
+      list.innerHTML = Object.values(CONNECTOR_CATALOG)
+        .map((app) => {
+          const isConnected = ws.connectors.includes(app.id);
+          return `
+            <div class="flex items-center justify-between p-3.5 rounded-xl bg-[#080B12] border ${isConnected ? 'border-emerald-500/40' : 'border-[#1E293B]'}">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-lg bg-[#111827] border border-[#1E293B] flex items-center justify-center text-base ${app.color}">
+                  <i class="${app.icon}"></i>
+                </div>
+                <div>
+                  <div class="text-xs sm:text-sm font-bold text-white">${app.name}</div>
+                  <div class="text-[11px] text-slate-400">${app.category}</div>
+                  <div class="text-[10px] font-mono text-slate-500 mt-0.5">${app.scope}</div>
+                </div>
+              </div>
+              <button onclick="toggleConnector('${app.id}')"
+                class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                  isConnected
+                    ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 hover:bg-rose-500/15 hover:text-rose-400 hover:border-rose-500/30'
+                    : 'bg-sky-500 hover:bg-sky-400 text-slate-950'
+                }">
+                ${isConnected ? 'Connected ✓' : 'Connect'}
+              </button>
+            </div>
+          `;
+        })
+        .join('');
+
+      const modal = document.getElementById('oauth-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeOAuthModal() {
+      const modal = document.getElementById('oauth-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function toggleConnector(connectorId) {
+      const ws = WORKSPACES[currentWorkspaceKey];
+      const idx = ws.connectors.indexOf(connectorId);
+      if (idx > -1) {
+        if (ws.connectors.length <= 1) {
+          showToast('At least 1 active data source is required for rollup', 'warning');
+          return;
+        }
+        ws.connectors.splice(idx, 1);
+        showToast(`Disconnected ${CONNECTOR_CATALOG[connectorId].name}`, 'info');
+      } else {
+        ws.connectors.push(connectorId);
+        showToast(`Connected ${CONNECTOR_CATALOG[connectorId].name} (Read-Only OAuth)`, 'success');
+      }
+      openOAuthModal();
+      renderDashboard();
+    }
+
+    // Push Delivery Preview Modal Controls
+    function openPushPreviewModal() {
+      switchPreviewFormat(currentPreviewFormat);
+      const modal = document.getElementById('push-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closePushPreviewModal() {
+      const modal = document.getElementById('push-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function switchPreviewFormat(fmt) {
+      currentPreviewFormat = fmt;
+      const btnEmail = document.getElementById('preview-btn-email');
+      const btnSlack = document.getElementById('preview-btn-slack');
+
+      if (fmt === 'email') {
+        btnEmail.className = 'px-2.5 py-1 rounded-md text-xs font-semibold bg-amber-500 text-slate-950';
+        btnSlack.className = 'px-2.5 py-1 rounded-md text-xs font-semibold text-slate-300 hover:text-white';
+      } else {
+        btnSlack.className = 'px-2.5 py-1 rounded-md text-xs font-semibold bg-amber-500 text-slate-950';
+        btnEmail.className = 'px-2.5 py-1 rounded-md text-xs font-semibold text-slate-300 hover:text-white';
+      }
+
+      const ws = WORKSPACES[currentWorkspaceKey];
+      const netCash = document.getElementById('kpi-net-value').textContent;
+      const rev = document.getElementById('kpi-rev-value').textContent;
+      const exp = document.getElementById('kpi-exp-value').textContent;
+      const cash = document.getElementById('kpi-cash-value').textContent;
+      const bodyEl = document.getElementById('push-preview-body');
+
+      if (fmt === 'email') {
+        bodyEl.innerHTML = `
+          <div class="bg-white text-slate-900 rounded-xl p-6 space-y-4 shadow-inner">
+            <div class="border-b border-slate-200 pb-3 flex items-center justify-between">
+              <div>
+                <div class="text-[11px] font-bold uppercase tracking-wider text-amber-600">ZEUS ONE • EXECUTIVE PULSE</div>
+                <div class="text-lg font-extrabold text-slate-950">${ws.period}</div>
+                <div class="text-xs text-slate-500">Prepared for ${ws.name} • Zero-Export Verified</div>
+              </div>
+              <span class="px-2.5 py-1 rounded-full bg-slate-900 text-amber-400 text-xs font-bold">Monday 7:00 AM</span>
+            </div>
+            <div class="grid grid-cols-2 gap-3 text-sm">
+              <div class="p-3 rounded-lg bg-slate-100">
+                <div class="text-xs text-slate-500">Net Cash Flow</div>
+                <div class="text-lg font-extrabold text-emerald-700">${netCash}</div>
+              </div>
+              <div class="p-3 rounded-lg bg-slate-100">
+                <div class="text-xs text-slate-500">Gross Revenue</div>
+                <div class="text-lg font-extrabold text-slate-900">${rev}</div>
+              </div>
+              <div class="p-3 rounded-lg bg-slate-100">
+                <div class="text-xs text-slate-500">Outflows & Ad Spend</div>
+                <div class="text-lg font-extrabold text-slate-900">${exp}</div>
+              </div>
+              <div class="p-3 rounded-lg bg-slate-100">
+                <div class="text-xs text-slate-500">Operating Cash</div>
+                <div class="text-lg font-extrabold text-slate-900">${cash}</div>
+              </div>
+            </div>
+            <div class="text-xs text-slate-700 leading-relaxed bg-amber-50 border border-amber-200 rounded-lg p-3">
+              ${ws.narrative}
+            </div>
+          </div>
+        `;
+      } else {
+        bodyEl.innerHTML = `
+          <div class="bg-[#1A1D21] border border-slate-700 rounded-xl p-5 font-sans text-slate-100 space-y-3">
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-lg bg-amber-500 text-slate-950 flex items-center justify-center font-extrabold">
+                <i class="fa-solid fa-bolt"></i>
+              </div>
+              <div>
+                <div class="text-sm font-bold text-white">Zeus One Pulse <span class="text-[10px] bg-slate-700 text-slate-300 px-1.5 py-0.5 rounded ml-1">APP</span></div>
+                <div class="text-[11px] text-slate-400">Posted to #exec-pulse • 7:00 AM</div>
+              </div>
+            </div>
+            <div class="border-l-4 border-amber-500 pl-3.5 py-1 space-y-2 text-xs">
+              <div class="font-bold text-sm text-white">${ws.period} — ${ws.name}</div>
+              <div class="grid grid-cols-2 gap-2 font-mono text-slate-200">
+                <div>• Net Cash: <strong>${netCash}</strong></div>
+                <div>• Gross Rev: <strong>${rev}</strong></div>
+                <div>• Outflows: <strong>${exp}</strong></div>
+                <div>• Cash Reserve: <strong>${cash}</strong></div>
+              </div>
+              <div class="text-slate-300 pt-1">${ws.narrative.replace(/<[^>]*>/g, '')}</div>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    // Copy Plain-Text Brief to Clipboard (using safe textarea fallback)
+    function copyDigestToClipboard() {
+      const ws = WORKSPACES[currentWorkspaceKey];
+      const netCash = document.getElementById('kpi-net-value').textContent;
+      const rev = document.getElementById('kpi-rev-value').textContent;
+      const exp = document.getElementById('kpi-exp-value').textContent;
+      const cash = document.getElementById('kpi-cash-value').textContent;
+      const summary = `${ws.period} (${ws.name})\nNet Cash Flow: ${netCash} | Gross Revenue: ${rev} | Expenses: ${exp} | Operating Cash: ${cash}\nSummary: ${ws.narrative.replace(/<[^>]*>/g, '')}`;
+
+      const textarea = document.createElement('textarea');
+      textarea.value = summary;
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        showToast('Formatted executive digest copied to clipboard', 'success');
+      } catch (err) {
+        showToast('Unable to copy automatically', 'warning');
+      }
+      document.body.removeChild(textarea);
+    }
+
+    function triggerSimulatedTestSend() {
+      closePushPreviewModal();
+      showToast('Test digest dispatched to active Email & Slack channels!', 'success');
+    }
+
+    function batchSendClientDigests() {
+      showToast('Dispatched white-labeled Monday briefs to all 18 client workspaces!', 'success');
+    }
+
+    // Download Standalone Single-File HTML App
+    function downloadStandaloneApp() {
+      const htmlContent = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+      const blob = new Blob([htmlContent], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'app.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('Downloaded app.html — ready for GitHub upload!', 'success');
+    }
+
+    // Non-blocking Toast Banner Notification
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      const borderMap = {
+        success: 'border-emerald-500/50 text-emerald-300',
+        warning: 'border-amber-500/50 text-amber-300',
+        info: 'border-sky-500/50 text-sky-300'
+      };
+      toast.className = `pointer-events-auto bg-[#0F172A] border ${borderMap[type] || borderMap.info} px-4 py-3 rounded-xl shadow-2xl text-xs font-semibold flex items-center justify-between gap-3 transition-all`;
+      toast.innerHTML = `
+        <span>${message}</span>
+        <button onclick="this.parentElement.remove()" class="text-slate-400 hover:text-white">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      `;
+      container.appendChild(toast);
+      setTimeout(() => {
+        if (toast.parentElement) toast.remove();
+      }, 3600);
+    }
+  </script>
+</body>
+</html>
