@@ -331,7 +331,7 @@
             <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-emerald-400"></i> 90-Day Trailing Benchmarks</li>
           </ul>
         </div>
-        <button onclick="openCheckoutModal('Pulse Starter', 49)" class="w-full py-3 rounded-xl bg-[#080B12] hover:bg-[#1E293B] border border-[#1E293B] text-white font-bold text-sm transition-all">
+        <button type="button" onclick="openCheckoutModal('Pulse Starter', 49)" class="w-full py-3 rounded-xl bg-[#080B12] hover:bg-[#1E293B] border border-[#1E293B] text-white font-bold text-sm transition-all cursor-pointer">
           Start 14-Day Free Trial
         </button>
       </div>
@@ -358,7 +358,7 @@
             <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-amber-400"></i> Multi-Recipient Executive Distribution</li>
           </ul>
         </div>
-        <button onclick="openCheckoutModal('Pulse Growth', 149)" class="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-sm shadow-lg shadow-amber-500/20 transition-all">
+        <button type="button" onclick="openCheckoutModal('Pulse Growth', 149)" class="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-sm shadow-lg shadow-amber-500/20 transition-all cursor-pointer">
           Start 14-Day Free Trial
         </button>
       </div>
@@ -382,7 +382,7 @@
             <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-sky-400"></i> One-Click Client OAuth Invite Links</li>
           </ul>
         </div>
-        <button onclick="openCheckoutModal('Fractional CFO / Agency', 399)" class="w-full py-3 rounded-xl bg-[#080B12] hover:bg-[#1E293B] border border-sky-500/40 text-sky-400 font-bold text-sm transition-all">
+        <button type="button" onclick="openCheckoutModal('Fractional CFO / Agency', 399)" class="w-full py-3 rounded-xl bg-[#080B12] hover:bg-[#1E293B] border border-sky-500/40 text-sky-400 font-bold text-sm transition-all cursor-pointer">
           Start 14-Day Partner Trial
         </button>
       </div>
@@ -416,7 +416,7 @@
           <span class="text-[11px] font-bold uppercase tracking-wider text-amber-400">14-Day Free Trial</span>
           <h3 id="checkout-plan-title" class="text-base font-extrabold text-white">Pulse Growth — $149/mo</h3>
         </div>
-        <button onclick="closeCheckoutModal()" class="text-slate-400 hover:text-white p-1.5">
+        <button type="button" onclick="closeCheckoutModal()" class="text-slate-400 hover:text-white p-1.5">
           <i class="fa-solid fa-xmark text-lg"></i>
         </button>
       </div>
@@ -444,7 +444,7 @@
           </div>
         </div>
 
-        <button type="submit" class="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-sm shadow-lg shadow-amber-500/20 transition-all">
+        <button type="submit" class="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-sm shadow-lg shadow-amber-500/20 transition-all cursor-pointer">
           Continue to Secure Stripe Checkout &rarr;
         </button>
       </form>
@@ -461,7 +461,73 @@
     let selectedPlanPrice = 149;
 
     const SAMPLE_NICHES = {
-// ... existing code ... -->
+      ecom: {
+        company: 'Apex E-Commerce Co. — Weekly Pulse',
+        net: '+$14,280',
+        netSub: '▲ +12.4% vs. prior week',
+        rev: '$48,900',
+        revSub: 'Shopify + Stripe',
+        leaks: [
+          '<strong>Refund Spike:</strong> Refunds hit 4.8% ($2,340) vs. 1.9% 90-day avg.',
+          '<strong>Overdue AR:</strong> 4 B2B invoices ($8,150) crossed 30 days past due.',
+          '<strong>Ad CAC Drift:</strong> Meta Ads spend rose 18% while conversions stayed flat.'
+        ]
+      },
+      agency: {
+        company: 'Vanguard B2B Agency — Weekly Pulse',
+        net: '+$22,640',
+        netSub: '▲ +8.6% vs. prior week',
+        rev: '$64,200',
+        revSub: 'QuickBooks + Stripe',
+        leaks: [
+          '<strong>Aging Retainers:</strong> 6 client invoices ($24,800) averaged 42 days past due.',
+          '<strong>Contractor Drift:</strong> Freelance design spend rose 14% on fixed-fee retainers.',
+          '<strong>Cash Buffer:</strong> Operating runway strong at 6.8 months ($284,000).'
+        ]
+      },
+      retail: {
+        company: 'Metro 4-Store Retail — Weekly Pulse',
+        net: '+$9,410',
+        netSub: '▼ -4.2% vs. prior week',
+        rev: '$53,400',
+        revSub: 'Square POS + Gusto',
+        leaks: [
+          '<strong>Overtime Alert:</strong> Store #3 Gusto payroll hit 38.4% of gross store sales.',
+          '<strong>Runway Floor:</strong> Operating cash dipped to 3.1 mos (below 4.0-mo guardrail).',
+          '<strong>Returns Spike:</strong> Weekend POS exchanges rose 2.1x at Scottsdale location.'
+        ]
+      }
+    };
+
+    function setSampleNiche(key) {
+      const data = SAMPLE_NICHES[key];
+      document.getElementById('sample-company').textContent = data.company;
+      document.getElementById('sample-net').textContent = data.net;
+      document.getElementById('sample-net-sub').textContent = data.netSub;
+      document.getElementById('sample-rev').textContent = data.rev;
+      document.getElementById('sample-rev-sub').textContent = data.revSub;
+      document.getElementById('sample-leaks').innerHTML = data.leaks.map(item => `<li>&bull; ${item}</li>`).join('');
+
+      ['ecom', 'agency', 'retail'].forEach(n => {
+        const btn = document.getElementById(`niche-${n}`);
+        btn.className = n === key
+          ? 'px-2.5 py-1 rounded-md font-semibold bg-amber-500 text-slate-950'
+          : 'px-2.5 py-1 rounded-md font-semibold text-slate-400 hover:text-white';
+      });
+    }
+
+    function updateROI() {
+      const hours = parseFloat(document.getElementById('roi-hours').value);
+      const rate = parseInt(document.getElementById('roi-rate').value, 10);
+      const annualHours = Math.round(hours * 52);
+      const annualSavings = Math.round(annualHours * rate);
+
+      document.getElementById('roi-hours-val').textContent = `${hours.toFixed(1)} hrs / wk`;
+      document.getElementById('roi-rate-val').textContent = `$${rate} / hr`;
+      document.getElementById('roi-annual-savings').textContent = `$${annualSavings.toLocaleString('en-US')}`;
+      document.getElementById('roi-hours-saved').innerHTML = `Reclaims <strong>${annualHours} hours/year</strong> of executive focus.`;
+    }
+
     function openCheckoutModal(planName, price) {
       selectedPlanPrice = price;
       document.getElementById('checkout-plan-title').textContent = `${planName} — $${price}/mo`;
