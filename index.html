@@ -116,7 +116,7 @@
         
         <!-- Left Copy -->
         <div class="lg:col-span-6 space-y-6">
-          <div class="rounded-2xl overflow-hidden border border-amber-500/30 shadow-2xl shadow-amber-500/15 bg-[#080B12]">
+          <div class="inline-block rounded-xl overflow-hidden border border-amber-500/30 shadow-xl shadow-amber-500/15 bg-[#080B12] max-w-[280px]">
             <img src="zeus-pulse-logo.jpg" alt="Zeus One Executive Pulse — The 7:00 AM Monday Executive Brief"
               onerror="this.parentElement.style.display='none';"
               class="w-full h-auto block" />
@@ -445,81 +445,25 @@
         </div>
 
         <button type="submit" class="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-sm shadow-lg shadow-amber-500/20 transition-all">
-          Provision Workspace &amp; Launch App &rarr;
+          Continue to Secure Stripe Checkout &rarr;
         </button>
       </form>
     </div>
   </div>
 
   <script>
-    const SAMPLE_NICHES = {
-      ecom: {
-        company: 'Apex E-Commerce Co. — Weekly Pulse',
-        net: '+$14,280',
-        netSub: '▲ +12.4% vs. prior week',
-        rev: '$48,900',
-        revSub: 'Shopify + Stripe',
-        leaks: [
-          '&bull; <strong>Refund Spike:</strong> Refunds hit 4.8% ($2,340) vs. 1.9% 90-day avg.',
-          '&bull; <strong>Overdue AR:</strong> 4 B2B invoices ($8,150) crossed 30 days past due.',
-          '&bull; <strong>Ad CAC Drift:</strong> Meta Ads spend rose 18% while conversions stayed flat.'
-        ]
-      },
-      agency: {
-        company: 'Vanguard B2B Agency — Weekly Pulse',
-        net: '+$22,640',
-        netSub: '▲ +8.6% vs. prior week',
-        rev: '$64,200',
-        revSub: 'QuickBooks + Stripe',
-        leaks: [
-          '&bull; <strong>Aging Retainers:</strong> 6 invoices ($24,800) passed 30 days overdue in QBO.',
-          '&bull; <strong>Utilization Dip:</strong> Contractor hours rose 9% on fixed-fee accounts.',
-          '&bull; <strong>Runway Strong:</strong> Operating reserves holding steady at 6.8 months.'
-        ]
-      },
-      retail: {
-        company: 'Metro 4-Location Retail — Weekly Pulse',
-        net: '+$9,410',
-        netSub: '▼ -4.2% vs. prior week',
-        rev: '$53,400',
-        revSub: 'Square POS + Gusto',
-        leaks: [
-          '&bull; <strong>Labor Ratio Alert:</strong> Store #3 overtime pushed payroll to 38.4% of sales.',
-          '&bull; <strong>Runway Floor:</strong> Cash reserves dipped to 3.1 mos (below 4.0-mo target).',
-          '&bull; <strong>Return Rate:</strong> Weekend POS exchanges rose to 3.6%.'
-        ]
-      }
+    const STRIPE_PAYMENT_LINKS = {
+      49: 'https://buy.stripe.com/aFa6oG6QR0gFg6c1qi6kg02',
+      149: 'https://buy.stripe.com/aFa7sKgrr7J7aLS7OG6kg01',
+      399: 'https://buy.stripe.com/6oU28qejjgfD07e9WO6kg00'
     };
 
-    function setSampleNiche(key) {
-      const data = SAMPLE_NICHES[key];
-      ['ecom', 'agency', 'retail'].forEach((k) => {
-        const btn = document.getElementById(`niche-${k}`);
-        btn.className = k === key
-          ? 'px-2.5 py-1 rounded-md font-semibold bg-amber-500 text-slate-950'
-          : 'px-2.5 py-1 rounded-md font-semibold text-slate-400 hover:text-white';
-      });
-      document.getElementById('sample-company').textContent = data.company;
-      document.getElementById('sample-net').textContent = data.net;
-      document.getElementById('sample-net-sub').textContent = data.netSub;
-      document.getElementById('sample-rev').textContent = data.rev;
-      document.getElementById('sample-rev-sub').textContent = data.revSub;
-      document.getElementById('sample-leaks').innerHTML = data.leaks.map((l) => `<li>${l}</li>`).join('');
-    }
+    let selectedPlanPrice = 149;
 
-    function updateROI() {
-      const hours = parseFloat(document.getElementById('roi-hours').value);
-      const rate = parseInt(document.getElementById('roi-rate').value, 10);
-      const annualHours = Math.round(hours * 52);
-      const annualDollars = Math.round(annualHours * rate);
-
-      document.getElementById('roi-hours-val').textContent = `${hours.toFixed(1)} hrs / wk`;
-      document.getElementById('roi-rate-val').textContent = `$${rate} / hr`;
-      document.getElementById('roi-annual-savings').textContent = `$${annualDollars.toLocaleString('en-US')}`;
-      document.getElementById('roi-hours-saved').innerHTML = `Reclaims <strong>${annualHours} hours/year</strong> of executive focus.`;
-    }
-
+    const SAMPLE_NICHES = {
+// ... existing code ... -->
     function openCheckoutModal(planName, price) {
+      selectedPlanPrice = price;
       document.getElementById('checkout-plan-title').textContent = `${planName} — $${price}/mo`;
       document.getElementById('checkout-price-note').textContent = `$${price}.00 / month`;
       const modal = document.getElementById('checkout-modal');
@@ -535,8 +479,12 @@
 
     function handleTrialSubmit(e) {
       e.preventDefault();
-      // Redirect directly into the workspace app (replace with live Stripe Payment Link when ready)
-      window.location.href = 'app.html';
+      const email = document.getElementById('trial-email').value.trim();
+      const baseStripeUrl = STRIPE_PAYMENT_LINKS[selectedPlanPrice] || STRIPE_PAYMENT_LINKS[149];
+      const checkoutUrl = email
+        ? `${baseStripeUrl}?prefilled_email=${encodeURIComponent(email)}`
+        : baseStripeUrl;
+      window.location.href = checkoutUrl;
     }
   </script>
 </body>
